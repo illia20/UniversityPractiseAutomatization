@@ -16,6 +16,8 @@ public class BBCFormTests {
     FormPage formPage;
     static JavascriptExecutor js;
     private WebDriverWait wait;
+    String user = "Tester";
+    String text = "Text";
 
     @BeforeClass
     public void setup(){
@@ -53,38 +55,58 @@ public class BBCFormTests {
 
     @Test
     public void checkEmptyName(){
-        formPage.writeText("Text");
+        formPage.writeText(text);
         System.out.println("Text - OK");
         formPage.clickTermsBox();
         System.out.println("CheckBox - OK");
         formPage.submit();
         System.out.println("Submit - Clicked");
         String textFromTextField = formPage.getTextValue();
-        Assert.assertEquals(textFromTextField, "Text");
+        Assert.assertEquals(textFromTextField, text);
     }
 
     @Test
     public void checkEmptyText(){
-        formPage.writeName("Vasya");
+        formPage.writeName(user);
         System.out.println("Name - OK");
         formPage.clickTermsBox();
         System.out.println("CheckBox - OK");
         formPage.submit();
         System.out.println("Submit - Clicked");
         String textFromNameField = formPage.getNameValue();
-        Assert.assertEquals(textFromNameField, "Vasya");
+        Assert.assertEquals(textFromNameField, user);
     }
 
     @Test
     public void checkEmptyCB(){
-        formPage.writeText("Text");
+        formPage.writeText(text);
         System.out.println("Text - OK");
-        formPage.writeName("Vasya");
+        formPage.writeName(user);
         System.out.println("Name - OK");
         formPage.submit();
         System.out.println("Submit - Clicked");
         String textFromNameField = formPage.getNameValue();
-        Assert.assertEquals(textFromNameField, "Vasya");
+        Assert.assertEquals(textFromNameField, user);
+    }
+
+    @Test
+    public void checkTextTooLong(){
+        StringBuilder stringBuilder = new StringBuilder("aaaaaaaaaa");
+        for(int i = 10; i < 500; i += 10)
+            stringBuilder.append("aaaaaaaaaa");
+
+        stringBuilder.append("a"); // length = 501
+
+        formPage.writeText(stringBuilder.toString());
+        System.out.println("Text - OK");
+        formPage.writeName(user);
+        System.out.println("Name - OK");
+        formPage.clickTermsBox();
+        System.out.println("CheckBox - OK");
+        formPage.submit();
+        System.out.println("Submit - Clicked");
+        String textFromNameField = formPage.getNameValue();
+        Assert.assertEquals(textFromNameField, user);
     }
 
     @AfterClass
